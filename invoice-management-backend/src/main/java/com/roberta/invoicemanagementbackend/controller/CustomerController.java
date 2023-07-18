@@ -1,6 +1,7 @@
 package com.roberta.invoicemanagementbackend.controller;
 
 
+import com.roberta.invoicemanagementbackend.model.Address;
 import com.roberta.invoicemanagementbackend.model.Customer;
 import com.roberta.invoicemanagementbackend.service.CustomerServiceImpl;
 import jakarta.validation.Valid;
@@ -33,6 +34,18 @@ import java.util.List;
         {
             return customerService.getAll();
         }
+
+        @PutMapping(path = "{id}")
+        public void updateCustomer(@PathVariable("id") Long id,@Valid @RequestBody Customer customer
+                                   ){
+        customerService.update(id, customer);
     }
+        @DeleteMapping(path = "{id}")
+        public void deleteCustomer(@PathVariable("id") Long id){
+            customerService.delete(id);
+        }
+
+
+}
 
 

@@ -34,6 +34,9 @@ public class Address {
     @OneToOne(mappedBy =  "address")
     private Customer customer;
 
+    @JsonBackReference
+    @OneToOne(mappedBy =  "shippingAddress")
+    private ShippingInfo shippingInfo;
 
     public Address() {
     }
@@ -103,5 +106,13 @@ public class Address {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public ShippingInfo getShippingInfo() {
+        return shippingInfo;
+    }
+
+    public void setShippingInfo(ShippingInfo shippingInfo) {
+        this.shippingInfo = shippingInfo;
     }
 }

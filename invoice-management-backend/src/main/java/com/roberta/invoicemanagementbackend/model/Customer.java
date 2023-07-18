@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -44,6 +45,9 @@ public class Customer {
     @Valid
     private Address address;
 
+    @OneToMany(mappedBy = "customer",
+                cascade = CascadeType.ALL)
+    private List<Invoice> invoiceList;
 
     public Customer() {
     }
