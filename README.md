@@ -5,7 +5,8 @@ This application is developed for invoice management and permits operations like
 1. Backend technologies:
    - Java 17
    - Spring Boot
-   - JPA and Hibernate  
+   - JPA and Hibernate
+   - MySQL
 2. Front-end technologies: 
    - React.js
    - Axios
