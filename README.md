@@ -1,5 +1,4 @@
 # Invoice management app
-This application is developed for invoice management and permits operations like add, delete,update and list invoices.
 
 ## Built With 
 1. Backend technologies:
