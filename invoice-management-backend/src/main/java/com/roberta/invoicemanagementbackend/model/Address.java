@@ -1,14 +1,18 @@
 package com.roberta.invoicemanagementbackend.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 
 @Entity
-@Table(name="addresses")
+@Table(name = "addresses")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "addressId")
 public class Address {
 
     @Id
@@ -30,12 +34,12 @@ public class Address {
     @NotBlank(message = "Country required!")
     private String country;
 
-    @JsonBackReference
-    @OneToOne(mappedBy =  "address")
+   // @JsonBackReference(value = "customer-address")
+    @OneToOne(mappedBy = "address")
     private Customer customer;
 
-    @JsonBackReference
-    @OneToOne(mappedBy =  "shippingAddress")
+
+    @OneToOne(mappedBy = "shippingAddress")
     private ShippingInfo shippingInfo;
 
     public Address() {
@@ -90,7 +94,6 @@ public class Address {
     public void setPostCode(String postCode) {
         this.postCode = postCode;
     }
-
 
     public String getCountry() {
         return country;

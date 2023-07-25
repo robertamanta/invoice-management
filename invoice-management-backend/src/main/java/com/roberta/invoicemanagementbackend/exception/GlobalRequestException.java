@@ -1,6 +1,6 @@
 package com.roberta.invoicemanagementbackend.exception;
 
-public class GlobalRequestException extends RuntimeException{
+public class GlobalRequestException extends RuntimeException {
 
 
     public GlobalRequestException(String message) {

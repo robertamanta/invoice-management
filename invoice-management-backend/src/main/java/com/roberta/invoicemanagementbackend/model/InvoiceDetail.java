@@ -1,6 +1,7 @@
 package com.roberta.invoicemanagementbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,10 +20,11 @@ public class InvoiceDetail {
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "invoice_details_products",
-    joinColumns = {@JoinColumn(name = "invoiceDetailId")},
-    inverseJoinColumns = {@JoinColumn(name = "productId")})
+            joinColumns = {@JoinColumn(name = "invoiceDetailId")},
+            inverseJoinColumns = {@JoinColumn(name = "productId")})
     private List<Product> products;
 
+    @NotNull(message = "Please insert the quantity!")
     private float quantity;
 
     private float discountPercent;
@@ -106,4 +108,6 @@ public class InvoiceDetail {
     public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
     }
+
+
 }

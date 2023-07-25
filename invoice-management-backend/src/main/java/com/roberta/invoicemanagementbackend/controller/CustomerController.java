@@ -1,7 +1,5 @@
 package com.roberta.invoicemanagementbackend.controller;
 
-
-import com.roberta.invoicemanagementbackend.model.Address;
 import com.roberta.invoicemanagementbackend.model.Customer;
 import com.roberta.invoicemanagementbackend.service.CustomerServiceImpl;
 import jakarta.validation.Valid;
@@ -12,38 +10,38 @@ import java.util.List;
 
 
 @CrossOrigin(origins = "http://localhost:3000/")
-    @RestController
-    @RequestMapping("/api/invoice_management/customers")
-    public class CustomerController {
+@RestController
+@RequestMapping("/api/invoice_management/customers")
+public class CustomerController {
 
-        private final CustomerServiceImpl customerService;
+    private final CustomerServiceImpl customerService;
 
-        @Autowired
-        public CustomerController(CustomerServiceImpl customerService) {
+    @Autowired
+    public CustomerController(CustomerServiceImpl customerService) {
 
-            this.customerService = customerService;
-        }
+        this.customerService = customerService;
+    }
 
-        @PostMapping()
-        public void saveCustomer(@Valid @RequestBody Customer customer){
-            customerService.create(customer);
-        }
+    @PostMapping()
+    public void saveCustomer(@Valid @RequestBody Customer customer) {
+        customerService.create(customer);
+    }
 
-        @GetMapping()
-        public List<Customer> getCustomers()
-        {
-            return customerService.getAll();
-        }
+    @GetMapping()
+    public List<Customer> getCustomers() {
+        return customerService.getAll();
+    }
 
-        @PutMapping(path = "{id}")
-        public void updateCustomer(@PathVariable("id") Long id,@Valid @RequestBody Customer customer
-                                   ){
+    @PutMapping(path = "{id}")
+    public void updateCustomer(@PathVariable("id") Long id, @Valid @RequestBody Customer customer
+    ) {
         customerService.update(id, customer);
     }
-        @DeleteMapping(path = "{id}")
-        public void deleteCustomer(@PathVariable("id") Long id){
-            customerService.delete(id);
-        }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteCustomer(@PathVariable("id") Long id) {
+        customerService.delete(id);
+    }
 
 
 }

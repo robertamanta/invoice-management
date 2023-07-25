@@ -22,6 +22,7 @@ public class Product {
 
     @ManyToMany(mappedBy = "products")
     private List<InvoiceDetail> invoiceDetails;
+
     public Product() {
     }
 
@@ -71,5 +72,13 @@ public class Product {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public List<InvoiceDetail> getInvoiceDetails() {
+        return invoiceDetails;
+    }
+
+    public void setInvoiceDetails(List<InvoiceDetail> invoiceDetails) {
+        this.invoiceDetails = invoiceDetails;
     }
 }

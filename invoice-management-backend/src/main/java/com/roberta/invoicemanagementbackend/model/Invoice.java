@@ -1,8 +1,13 @@
 package com.roberta.invoicemanagementbackend.model;
 
+import com.fasterxml.jackson.annotation.*;
 import com.roberta.invoicemanagementbackend.enumeration.Status;
 import com.roberta.invoicemanagementbackend.enumeration.Type;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,6 +18,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "invoices")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "invoiceNumber")
 public class Invoice {
 
     @Id
@@ -33,24 +41,29 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Past(message = "Invoice date cannot be empty!")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate invoiceDate;
 
+    @Past(message = "Due date cannot be empty!")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate dueDate;
 
     private String Details;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL/*,fetch = FetchType.LAZY*/)
     @JoinColumn(name = "customer_id")
+    @Valid
+   // @JsonBackReference(value = "customer-invoice")
     private Customer customer;
-
-
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shipping_id")
+    @Valid
     private ShippingInfo shippingInfo;
 
     @OneToMany(mappedBy = "invoice",
-    cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     private List<InvoiceDetail> invoiceDetails;
 
     private BigDecimal totalAmount;
@@ -160,4 +173,6 @@ public class Invoice {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }

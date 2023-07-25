@@ -17,7 +17,7 @@ import java.util.Map;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {GlobalRequestException.class})
-    public ResponseEntity<Object> handleCustomerRequestException(GlobalRequestException e){
+    public ResponseEntity<Object> handleCustomerRequestException(GlobalRequestException e) {
         ApiException apiException = new ApiException(
                 e.getMessage(),
                 e,
@@ -31,12 +31,12 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String,String> handleValidationExceptions(MethodArgumentNotValidException e){
-        Map<String,String> errors = new HashMap<>();
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException e) {
+        Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError)error).getField();
+            String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
-            errors.put(fieldName,message);
+            errors.put(fieldName, message);
         });
         return errors;
     }

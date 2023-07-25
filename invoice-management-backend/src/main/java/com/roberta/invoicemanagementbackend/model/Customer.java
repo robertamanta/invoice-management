@@ -1,7 +1,9 @@
 package com.roberta.invoicemanagementbackend.model;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -12,9 +14,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Entity
 @Table(name = "customers")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "customerId")
 public class Customer {
 
     @Id
@@ -39,7 +43,7 @@ public class Customer {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @JsonManagedReference
+   // @JsonManagedReference(value = "customer-address")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     @Valid
@@ -47,6 +51,7 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer",
                 cascade = CascadeType.ALL)
+    //@JsonManagedReference(value = "customer-invoice")
     private List<Invoice> invoiceList;
 
     public Customer() {
@@ -123,5 +128,13 @@ public class Customer {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public List<Invoice> getInvoiceList() {
+        return invoiceList;
+    }
+
+    public void setInvoiceList(List<Invoice> invoiceList) {
+        this.invoiceList = invoiceList;
     }
 }
