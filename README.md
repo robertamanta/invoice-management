@@ -1,8 +1,7 @@
 # Invoice management REST API
 
-# Quick Start - FOR BACKEND
 
-## Prerequisites
+## Quick start - invoice-management-backend
 
 #### 1. Create a MySQL database
 
@@ -21,7 +20,7 @@ In case you want to use a different database name, follow the next steps:
 - Open ```src/main/resources/application.properties``` file
 - Change ```spring.datasource.username``` and ```spring.datasource.password``` properties to match your MySQL connection
 
-## Build project
+### 3. Build project
 
 Build the application using the following **maven wrapper** command:
 ```
@@ -34,7 +33,7 @@ projects locally, use the following command:
 ```
 Each of these commands will create an executable ```.jar``` file at ```target``` directory.
 
-## Run project
+### 4. Run project
 
 You can start the server by running the following command:
 ```
