@@ -41,6 +41,22 @@ You can start the server by running the following command:
 ```
 The server will start running at http://localhost:8080.
 
+### How to use endpoints
+###### CREATE INVOICE
+`POST /api/invoice_management/invoices`
+
+###### LIST ALL INVOICES
+`GET /api/invoice_management/invoices`
+
+###### SEARCH INVOICE BY NUMBER
+`GET /api/invoice_management/invoices/:_id`
+
+###### UPDATE INVOICE 
+`PUT /api/invoice_management/invoices/:_id`
+
+###### DELETE INVOICE 
+`DELETE /api/invoice_management/invoices/:_id`
+
 ## Built With 
 1. Backend technologies:
    - Java 17
