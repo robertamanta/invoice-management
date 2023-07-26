@@ -3,7 +3,9 @@ package com.roberta.invoicemanagementbackend.service;
 import com.roberta.invoicemanagementbackend.exception.GlobalRequestException;
 import com.roberta.invoicemanagementbackend.model.Customer;
 import com.roberta.invoicemanagementbackend.model.Invoice;
+import com.roberta.invoicemanagementbackend.model.ShippingInfo;
 import com.roberta.invoicemanagementbackend.repository.InvoiceRepository;
+import com.roberta.invoicemanagementbackend.repository.ShippingInfoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +15,25 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class InvoiceServiceImpl implements InvoiceService{
+public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
+    private final ShippingInfoRepository shippingInfoRepository;
+    private final CustomerServiceImpl customerService;
+    private final AddressServiceImpl addressService;
 
     @Autowired
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository) {
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, ShippingInfoRepository shippingInfoRepository, CustomerServiceImpl customerService, AddressServiceImpl addressService) {
         this.invoiceRepository = invoiceRepository;
+        this.shippingInfoRepository = shippingInfoRepository;
+        this.customerService = customerService;
+        this.addressService = addressService;
     }
 
     @Override
     public List<Invoice> getAll() {
         List<Invoice> invoiceList = invoiceRepository.findAll();
-        if(invoiceList.isEmpty()){
+        if (invoiceList.isEmpty()) {
             throw new GlobalRequestException("Invoices not found!");
         }
         return invoiceList;
@@ -42,19 +50,23 @@ public class InvoiceServiceImpl implements InvoiceService{
 
     @Override
     public void create(Invoice invoice) {
-        if (invoice.getInvoiceNumber()!=null) {
+        if (invoice.getInvoiceNumber() != null) {
             Optional<Invoice> findInvoice = invoiceRepository.findById(invoice.getInvoiceNumber());
             if (findInvoice.isPresent()) {
                 throw new GlobalRequestException("Invoice with number: " + invoice.getInvoiceNumber() + " already exists!");
             }
+        }
+        Customer findCustomer = customerService.getCustomerByEmail(invoice.getCustomer().getEmail());
+        if (findCustomer != null) {
+            throw new GlobalRequestException("Customer already exists!");
         }
         invoiceRepository.save(invoice);
     }
 
     @Transactional
     public void update(Long invoiceId, Invoice invoice) {
-            Invoice updateInvoice =  invoiceRepository.findById(invoiceId)
-                    .orElseThrow(() ->new GlobalRequestException("Invoice with number " + invoiceId + "not found!"));
+        Invoice updateInvoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new GlobalRequestException("Invoice with number " + invoiceId + "not found!"));
         if (invoice.getStatus() != null
                 && !Objects.equals(updateInvoice.getStatus(), invoice.getStatus())) {
             updateInvoice.setStatus(invoice.getStatus());
@@ -71,14 +83,17 @@ public class InvoiceServiceImpl implements InvoiceService{
                 && !Objects.equals(updateInvoice.getDetails(), invoice.getDetails())) {
             updateInvoice.setDetails(invoice.getDetails());
         }
-        if (invoice.getCustomer() != null
-                && !Objects.equals(updateInvoice.getCustomer(), invoice.getCustomer())) {
-            updateInvoice.setCustomer(invoice.getCustomer());
+        if (invoice.getCustomer() != null) {
+            customerService.update(updateInvoice.getCustomer().getCustomerId(), invoice.getCustomer());
         }
-        if (invoice.getShippingInfo() != null
-                && !Objects.equals(updateInvoice.getShippingInfo(), invoice.getShippingInfo())) {
-            updateInvoice.setShippingInfo(invoice.getShippingInfo());
+
+        if (invoice.getShippingInfo() != null) {
+            ShippingInfo updateShippingInfo = shippingInfoRepository.findById(updateInvoice.getShippingInfo().getId()).get();
+            updateShippingInfo.setName(invoice.getShippingInfo().getName());
+            updateShippingInfo.setPhoneNumber(invoice.getShippingInfo().getPhoneNumber());
+            addressService.update(updateShippingInfo.getShippingAddress().getAddressId(), invoice.getShippingInfo().getShippingAddress());
         }
+
         if (invoice.getTotalAmount() != null
                 && !Objects.equals(updateInvoice.getTotalAmount(), invoice.getTotalAmount())) {
             updateInvoice.setTotalAmount(invoice.getTotalAmount());
@@ -89,11 +104,10 @@ public class InvoiceServiceImpl implements InvoiceService{
 
     @Override
     public void delete(Long invoiceId) {
-       boolean exists = invoiceRepository.existsById(invoiceId);
-       if(!exists)
-       {
-           throw new GlobalRequestException("Invoice with id: " + invoiceId + " does not exists!");
-       }
-       invoiceRepository.deleteById(invoiceId);
+        boolean exists = invoiceRepository.existsById(invoiceId);
+        if (!exists) {
+            throw new GlobalRequestException("Invoice with id: " + invoiceId + " does not exists!");
+        }
+        invoiceRepository.deleteById(invoiceId);
     }
 }

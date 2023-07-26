@@ -1,7 +1,6 @@
 package com.roberta.invoicemanagementbackend.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;

@@ -1,12 +1,13 @@
 package com.roberta.invoicemanagementbackend.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.roberta.invoicemanagementbackend.enumeration.Status;
 import com.roberta.invoicemanagementbackend.enumeration.Type;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Past;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,12 +42,12 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Past(message = "Invoice date cannot be empty!")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    @Past(message = "Invoice date cannot be in the future!")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate invoiceDate;
 
-    @Past(message = "Due date cannot be empty!")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    @FutureOrPresent(message = "Due date is invalid!")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
     private String Details;
@@ -54,7 +55,7 @@ public class Invoice {
     @ManyToOne(cascade = CascadeType.ALL/*,fetch = FetchType.LAZY*/)
     @JoinColumn(name = "customer_id")
     @Valid
-   // @JsonBackReference(value = "customer-invoice")
+    // @JsonBackReference(value = "customer-invoice")
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)

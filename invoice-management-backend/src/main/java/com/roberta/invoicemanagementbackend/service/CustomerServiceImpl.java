@@ -2,9 +2,7 @@ package com.roberta.invoicemanagementbackend.service;
 
 
 import com.roberta.invoicemanagementbackend.exception.GlobalRequestException;
-import com.roberta.invoicemanagementbackend.model.Address;
 import com.roberta.invoicemanagementbackend.model.Customer;
-import com.roberta.invoicemanagementbackend.repository.AddressRepository;
 import com.roberta.invoicemanagementbackend.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +16,14 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final AddressRepository addressRepository;
+    private final AddressServiceImpl addressService;
 
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, AddressRepository addressRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, AddressServiceImpl addressService) {
         this.customerRepository = customerRepository;
+        this.addressService = addressService;
 
-        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -40,6 +38,16 @@ public class CustomerServiceImpl implements CustomerService {
             throw new GlobalRequestException("Customer not found!");
         }
         return findCustomer.get();
+    }
+
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        Optional<Customer> findCustomer = customerRepository.findCustomerByEmail(email);
+        if (findCustomer.isPresent()) {
+            return findCustomer.get();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -73,12 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
             updateCustomer.setPhoneNumber(customer.getPhoneNumber());
         }
         if (customer.getAddress() != null) {
-            Address updateAddress = addressRepository.findById(updateCustomer.getAddress().getAddressId()).get();
-            updateAddress.setCity(customer.getAddress().getCity());
-            updateAddress.setCountry(customer.getAddress().getCountry());
-            updateAddress.setNumber(customer.getAddress().getNumber());
-            updateAddress.setStreet(customer.getAddress().getStreet());
-            updateAddress.setPostCode(customer.getAddress().getPostCode());
+            addressService.update(updateCustomer.getAddress().getAddressId(), customer.getAddress());
         }
 
     }

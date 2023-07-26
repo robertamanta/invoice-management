@@ -1,6 +1,5 @@
 package com.roberta.invoicemanagementbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -34,7 +33,7 @@ public class Address {
     @NotBlank(message = "Country required!")
     private String country;
 
-   // @JsonBackReference(value = "customer-address")
+    // @JsonBackReference(value = "customer-address")
     @OneToOne(mappedBy = "address")
     private Customer customer;
 

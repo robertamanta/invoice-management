@@ -1,8 +1,6 @@
 package com.roberta.invoicemanagementbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -11,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import java.util.List;
         property = "customerId")
 public class Customer {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,7 +30,7 @@ public class Customer {
     private String name;
 
     @NotBlank(message = "Phone number required!")
-    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid phone number!")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "Invalid phone number!")
     private String phoneNumber;
 
     @NotBlank(message = "Email required!")
@@ -43,21 +43,21 @@ public class Customer {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-   // @JsonManagedReference(value = "customer-address")
+    // @JsonManagedReference(value = "customer-address")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     @Valid
     private Address address;
 
     @OneToMany(mappedBy = "customer",
-                cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     //@JsonManagedReference(value = "customer-invoice")
     private List<Invoice> invoiceList;
 
     public Customer() {
     }
 
-    public Customer(String name, String phoneNumber, Address address,String email) {
+    public Customer(String name, String phoneNumber, Address address, String email) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -137,4 +137,6 @@ public class Customer {
     public void setInvoiceList(List<Invoice> invoiceList) {
         this.invoiceList = invoiceList;
     }
+
+
 }
