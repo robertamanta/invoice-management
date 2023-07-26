@@ -1,4 +1,4 @@
-# Invoice management app
+# Invoice management REST API
 
 ## Built With 
 1. Backend technologies:
