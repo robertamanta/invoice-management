@@ -41,7 +41,7 @@ You can start the server by running the following command:
 ```
 The server will start running at http://localhost:8080.
 
-### How to use endpoints
+## How to use endpoints
 ###### CREATE INVOICE
 `POST /api/invoice_management/invoices`
 
