@@ -52,7 +52,7 @@ public class Invoice {
 
     private String Details;
 
-    @ManyToOne(cascade = CascadeType.ALL/*,fetch = FetchType.LAZY*/)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "customer_id")
     @Valid
     // @JsonBackReference(value = "customer-invoice")

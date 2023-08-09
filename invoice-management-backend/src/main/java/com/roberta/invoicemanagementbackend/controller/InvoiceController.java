@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/invoice_management/invoices")
+@RequestMapping("/api/invoice-management/invoices")
 public class InvoiceController {
 
     private final InvoiceServiceImpl invoiceService;

@@ -34,6 +34,7 @@ public class ShippingInfo {
     @OneToOne(mappedBy = "shippingInfo")
     private Invoice invoice;
 
+
     public ShippingInfo() {
     }
 

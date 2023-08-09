@@ -57,8 +57,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
         Customer findCustomer = customerService.getCustomerByEmail(invoice.getCustomer().getEmail());
+        //if customer already exists set the customer to the invoice
         if (findCustomer != null) {
-            throw new GlobalRequestException("Customer already exists!");
+            invoice.setCustomer(findCustomer);
         }
         invoiceRepository.save(invoice);
     }
